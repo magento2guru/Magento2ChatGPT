@@ -1,0 +1,21 @@
+{
+    "name": "magento2developer/module-chatgpt",
+    "description": "Integrate ChatGPT to Magento",
+    "type": "magento2-module",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Magento2Developer",
+            "email": "m@magento2developer.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento2Developer\\ChatGPT\\": ""
+        }
+    }
+}

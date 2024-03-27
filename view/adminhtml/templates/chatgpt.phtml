@@ -1,0 +1,205 @@
+<style>
+    .sticky-bar {
+        position: fixed;
+        bottom: 0;
+        width: inherit;
+        background-color: #f8f9fa;
+        padding: 10px 15px 10px 15px;
+        z-index: 1000;
+        border-top: 1px solid;
+        resize: vertical;
+        overflow: auto;
+        height: 250px;
+    }
+
+    .sticky-bar button {
+        margin-right: 20px;
+    }
+
+
+    .sticky-bar textarea {
+        width: 100%;
+        height: 100px;
+    }
+
+    #chatgpt_message {
+        height: 100px;
+    }
+
+</style>
+
+<script>
+    function chatGPT() {
+        return {
+            textAreaPrompt: '',
+            prompt: '',
+            result: '',
+            open: false,
+            backendUrl: <?php echo json_encode($this->getUrl('chatgpt/index/index', ['form_key' => $this->getFormKey()])) ?>,
+            backendImageUrl: <?php echo json_encode($this->getUrl('chatgpt/index/image', ['form_key' => $this->getFormKey()])) ?>,
+            showUploadImage: false,
+            context: [],
+            lastFocus: null,
+            lastFocusType: 'input',
+            init: function() {
+                let self = this;
+                require(['jquery','mage/translate'],
+                    function ($) {
+                        $(document).ajaxComplete(function() {
+                            self.buildContext();
+                            $(document.body).on('contentUpdated',function() {
+                                if (document.getElementById('fileupload')) {
+                                    self.showUploadImage = true;
+                                } else {
+                                    self.showUploadImage = false;
+                                }
+
+                            })
+
+                            $(document).on('click',function(event) {
+                                const label = $(event.target).parents('.admin__field').find('.admin__field-label label span').text();
+                                if (!label) return null;
+                                self.lastFocus = $(event.target);
+                                self.lastFocusType = 'input';
+                                self.buildPrompt(label);
+                            })
+
+                            tinymce.on('AddEditor', function(e) {
+                                e.editor.on('focus', function(event) {
+                                    let label = $(event.target).parents('.admin__field').find('.admin__field-label label span').text();
+
+                                    if (e.editor.id == "product_form_short_description") {
+                                        label = "Short Description";
+                                    }
+
+                                    if (!label) return null;
+
+                                    self.lastFocus = $(event.target);
+                                    self.lastFocusType = 'tinymce';
+                                    self.buildPrompt(label);
+                                });
+
+                            });
+                        });
+                    });
+            },
+            buildPrompt: function(label) {
+                let prompt = 'Context:\n';
+
+                for (let i = 0; i < this.context.length; i++) {
+                    prompt += '- '+ this.context[i].label+ ': '+ this.context[i].value+'\n';
+                }
+
+                prompt += '\nRequest: \n';
+                prompt += 'Write '+label.toLowerCase()+ ' for product in context with html format';
+                this.textAreaPrompt = 'Write '+label.toLowerCase()+ ' for product in context';
+                this.prompt = prompt;
+            },
+            buildContext: function () {
+                let context = []
+
+                context.push({
+                    label: "Product Name",
+                    value: jQuery('[name="product[name]"]').val()
+                })
+
+                context.push({
+                    label: "Categories",
+                    value: jQuery('[data-index="container_category_ids"] .admin__action-multiselect-crumb > span').map((index,el) => jQuery(el).text()).toArray().join(', ')
+                });
+                context.push({
+                    label: "Language",
+                    value: <?php echo json_encode($this->getCurrentProductLanguage()); ?>
+                })
+
+                this.context = context;
+            },
+            request: async function () {
+                const res = await fetch(this.backendUrl,{
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        prompt: this.prompt
+                    })
+                }).then(response => response.json()).catch(e => {
+                    console.log(e);
+                })
+
+                this.result = res.message;
+            },
+            uploadImage: async function () {
+                return fetch(this.backendImageUrl, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "image/png",
+                        },
+                        body: JSON.stringify({
+                            prompt: this.textAreaPrompt
+                        })
+                    })
+                    .then(function(response) {
+                        return response.blob()
+                    })
+                    .then(function(blob) {
+                        try {
+                            const myFile = new File([blob], 'image.png', {
+                                type: 'image/png',
+                            });
+
+                            let container = new DataTransfer();
+                            container.items.add(myFile);
+
+                            const uploader = document.getElementById('fileupload');
+
+                            uploader.files = container.files;
+                            jQuery(uploader).trigger('change')
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    });
+            },
+            copyToField() {
+                if (this.lastFocusType == 'tinymce') {
+                    tinymce.activeEditor.setContent(this.result);
+                    return;
+                }
+                jQuery(this.lastFocus).val(this.result)
+            }
+        }
+     }
+</script>
+
+<div class="sticky-bar" x-data="chatGPT()"  >
+
+    <div style="margin-bottom: 10px;">
+        <strong>Context:</strong>
+        <ul style="margin-left: 20px;" >
+            <template x-for="_context in context" >
+                <li>
+                    <b x-text="_context.label" ></b>:
+                    <span x-text="_context.value"></span>
+                </li>
+            </template>
+        </ul>
+    </div>
+
+    <div class=" d-flex " style=" gap:20px; width: 100%; display: flex; flex-direction: row; justify-content: space-between; align-items: flex-start; ">
+        <div class="col " style="flex-grow: 1; flex-shrink: 1;">
+            <textarea id="chatgpt_prompt" class="form-control" x-model="textAreaPrompt"  ></textarea>
+            <div style="margin-bottom: 10px;">
+                <button class="btn btn-outline-secondary" @click="request" type="button">Request AI</button>
+                <button class="btn btn-outline-secondary" x-show="showUploadImage" @click="uploadImage" type="button">Generate Product Image</button>
+            </div>
+        </div>
+
+        <div class="col " style="flex-grow: 1; flex-shrink: 1;">
+            <textarea id="chatgpt_message"  class="form-control" x-model="result" ></textarea>
+            <div style="margin-bottom: 10px;">
+                <button class="btn btn-outline-secondary" @click="copyToField" type="button">Apply To Selected Field</button>
+            </div>
+        </div>
+    </div>
+
+</div>
