@@ -108,7 +108,7 @@
                 return fetch(this.backendImageUrl, {
                         method: "POST",
                         headers: {
-                            "Content-Type": "image/png",
+                            "Content-Type": "image/jpeg",
                         },
                         body: JSON.stringify({
                             prompt: this.textAreaPrompt
@@ -119,8 +119,8 @@
                     })
                     .then(function(blob) {
                         try {
-                            const myFile = new File([blob], 'image.png', {
-                                type: 'image/png',
+                            const myFile = new File([blob], 'image.jpg', {
+                                type: 'image/jpeg',
                             });
 
                             let container = new DataTransfer();

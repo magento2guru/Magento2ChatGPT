@@ -43,14 +43,18 @@ class Image extends Action
      */
     public function execute()
     {
-
         $data = json_decode($this->request->getContent(), true);
 
-        $imageContent = file_get_contents($this->generateImage($data['prompt']));
+        $response = $this->generateImage($data['prompt']);
 
-        // Set the content type to the image MIME type
-        return $this->getResponse()->setHeader('Content-Type', 'image/png')
-            ->setBody($imageContent);
+        if (empty($response['error'])) {
+            $image = imagecreatefrompng((string) $this->generateImage($data['prompt']));
+            imagejpeg($image, null, 30);
+            imagedestroy($image);
+            return $this->getResponse()->setHeader('Content-Type', 'image/jpeg');
+        }
+
+        return $this->getResponse()->setBody(json_encode($response));
     }
 
     private function generateImage($prompt)
