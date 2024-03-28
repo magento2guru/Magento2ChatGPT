@@ -4,7 +4,7 @@
 		<magento2developer>
 			<chatgpt>
 				<token/>
-                <model>chatgpt-3</model>
+                <model>gpt-3.5-turbo</model>
                 <model_image>dall-e-3</model_image>
 			</chatgpt>
 		</magento2developer>

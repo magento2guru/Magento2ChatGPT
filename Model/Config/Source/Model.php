@@ -14,6 +14,11 @@ class Model implements OptionSourceInterface
 
     public function toOptionArray()
     {
-        return [['value' => 'chatgpt-3', 'label' => __('ChatGPT 3')],['value' => 'chatgpt-4', 'label' => __('ChatGPT 4')]];
+        return [
+            ['value' => 'gpt-3.5-turbo', 'label' => __('GPT 3')],
+            ['value' => 'gpt-4-turbo-preview', 'label' => __('GPT 4 Turbo Preview')],
+            ['value' => 'gpt-4', 'label' => __('GPT 4')],
+            ['value' => 'gpt-4-32k', 'label' => __('GPT 4 32K')]
+        ];
     }
 }
