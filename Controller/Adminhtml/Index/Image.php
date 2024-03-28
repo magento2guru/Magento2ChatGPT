@@ -73,7 +73,7 @@ class Image extends Action
                     "model" => $modelImage,
                     'prompt' => $prompt,
                     "n" => 1,
-                    "style" => 'natural'
+                    "style" => 'vivid'
                 ]
             ]);
 
