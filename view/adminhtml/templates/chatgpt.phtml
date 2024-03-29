@@ -1,11 +1,9 @@
-<style>
-
-
-</style>
-
 <script>
+
     function chatGPT() {
         return {
+            model: 'product',
+            promptMap: <?php echo json_encode($this->buildPromptMap()); ?>,
             textAreaPrompt: '',
             prompt: '',
             result: '',
@@ -66,8 +64,17 @@
                 }
 
                 prompt += '\nRequest: \n';
-                prompt += 'Write '+label.toLowerCase()+ ' for product in context';
-                this.textAreaPrompt = 'Write '+label.toLowerCase()+ ' for product in context';
+                let requestStr = this.promptMap[this.model][label] ?? 'Write '+label.toLowerCase()+ ' for product in context';
+
+                requestStr = requestStr.replaceAll('%label%',label.toLowerCase())
+
+                for (let i = 0; i < this.context.length; i++) {
+                    requestStr = requestStr.replaceAll('%'+this.context[i].label.toLowerCase().replaceAll(' ','_')+'%',this.context[i].value);
+                }
+
+                prompt += requestStr;
+                this.textAreaPrompt = requestStr;
+
                 this.prompt = prompt;
             },
             buildContext: function () {
@@ -90,6 +97,7 @@
                 this.context = context;
             },
             request: async function () {
+                jQuery('body').trigger('processStart');
                 const res = await fetch(this.backendUrl,{
                     method: "POST",
                     headers: {
@@ -100,11 +108,16 @@
                     })
                 }).then(response => response.json()).catch(e => {
                     console.log(e);
+                    jQuery('body').trigger('processStop');
                 })
 
                 this.result = res.message;
+                jQuery('body').trigger('processStop');
             },
             uploadImage: async function () {
+                jQuery('body').trigger('processStart');
+                this.buildPrompt('Product Image');
+
                 return fetch(this.backendImageUrl, {
                         method: "POST",
                         headers: {
@@ -130,8 +143,10 @@
 
                             uploader.files = container.files;
                             jQuery(uploader).trigger('change')
+                            jQuery('body').trigger('processStop');
                         } catch (e) {
                             console.log(e);
+                            jQuery('body').trigger('processStop');
                         }
                     });
             },

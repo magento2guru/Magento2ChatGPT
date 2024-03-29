@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+	<table name="magento2developer_chatgpt_prompt" resource="default" engine="innodb" comment="magento2developer_chatgpt_prompt Table">
+		<column xsi:type="int" name="prompt_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity Id"/>
+		<constraint xsi:type="primary" referenceId="PRIMARY">
+			<column name="prompt_id"/>
+		</constraint>
+		<column name="model" nullable="true" xsi:type="varchar" comment="model" length="255"/>
+		<index referenceId="MAGENTO2DEVELOPER_CHATGPT_PROMPT_MODEL" indexType="btree">
+			<column name="model"/>
+		</index>
+		<column name="label" nullable="true" xsi:type="varchar" comment="label" length="255"/>
+		<column name="prompt" nullable="true" xsi:type="text" comment="prompt"/>
+	</table>
+</schema>

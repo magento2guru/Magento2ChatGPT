@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Magento2Developer::top_level" title="Magento2Developer" module="Magento2Developer_ChatGPT" sortOrder="9999" resource="Magento_Backend::content"/>
+        <add id="Magento2Developer_ChatGPT::magento2developer_chatgpt_prompt" title="Prompt" module="Magento2Developer_ChatGPT" sortOrder="9999" resource="Magento_Backend::content" parent="Magento2Developer::top_level" action="magento2developer_chatgpt/prompt/index"/>
+    </menu>
+</config>

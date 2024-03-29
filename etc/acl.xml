@@ -3,6 +3,18 @@
 	<acl>
 		<resources>
 			<resource id="Magento_Backend::admin">
+
+                <resource id="Magento2Developer_ChatGPT::chatgpt" title="chatgpt" sortOrder="10">
+                    <resource id="Magento2Developer_ChatGPT::index_index" title="index index" sortOrder="10"/>
+                    <resource id="Magento2Developer_ChatGPT::index_image" title="index image" sortOrder="10"/>
+                </resource>
+                <resource id="Magento2Developer_ChatGPT::Prompt" title="Prompt" sortOrder="10">
+                    <resource id="Magento2Developer_ChatGPT::Prompt_save" title="Save Prompt" sortOrder="10"/>
+                    <resource id="Magento2Developer_ChatGPT::Prompt_delete" title="Delete Prompt" sortOrder="20"/>
+                    <resource id="Magento2Developer_ChatGPT::Prompt_update" title="Update Prompt" sortOrder="30"/>
+                    <resource id="Magento2Developer_ChatGPT::Prompt_view" title="View Prompt" sortOrder="40"/>
+                </resource>
+
 				<resource id="Magento_Backend::stores">
 					<resource id="Magento_Backend::stores_settings">
 						<resource id="Magento_Config::config">
@@ -10,6 +22,7 @@
 						</resource>
 					</resource>
 				</resource>
+
 			</resource>
 		</resources>
 	</acl>

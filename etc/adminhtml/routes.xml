@@ -4,5 +4,8 @@
         <route id="chatgpt" frontName="chatgpt">
             <module name="Magento2Developer_ChatGPT" before="Magento_Backend"/>
         </route>
+        <route frontName="magento2developer_chatgpt" id="magento2developer_chatgpt">
+            <module before="Magento_Backend" name="Magento2Developer_ChatGPT"/>
+        </route>
     </router>
 </config>

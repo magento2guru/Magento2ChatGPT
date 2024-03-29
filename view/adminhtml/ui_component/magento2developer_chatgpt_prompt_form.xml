@@ -1,0 +1,89 @@
+<?xml version="1.0" ?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+	<argument name="data" xsi:type="array">
+		<item name="js_config" xsi:type="array">
+			<item name="provider" xsi:type="string">magento2developer_chatgpt_prompt_form.prompt_form_data_source</item>
+		</item>
+		<item name="label" xsi:type="string" translate="true">General Information</item>
+		<item name="template" xsi:type="string">templates/form/collapsible</item>
+	</argument>
+	<settings>
+		<buttons>
+			<button name="back" class="Magento2Developer\ChatGPT\Block\Adminhtml\Prompt\Edit\BackButton"/>
+			<button name="delete" class="Magento2Developer\ChatGPT\Block\Adminhtml\Prompt\Edit\DeleteButton"/>
+			<button name="save" class="Magento2Developer\ChatGPT\Block\Adminhtml\Prompt\Edit\SaveButton"/>
+			<button name="save_and_continue" class="Magento2Developer\ChatGPT\Block\Adminhtml\Prompt\Edit\SaveAndContinueButton"/>
+		</buttons>
+		<namespace>magento2developer_chatgpt_prompt_form</namespace>
+		<dataScope>data</dataScope>
+		<deps>
+			<dep>magento2developer_chatgpt_prompt_form.prompt_form_data_source</dep>
+		</deps>
+	</settings>
+	<dataSource name="prompt_form_data_source">
+		<argument name="data" xsi:type="array">
+			<item name="js_config" xsi:type="array">
+				<item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+			</item>
+		</argument>
+		<settings>
+			<submitUrl path="*/*/save"/>
+		</settings>
+		<dataProvider name="prompt_form_data_source" class="Magento2Developer\ChatGPT\Model\Prompt\DataProvider">
+			<settings>
+				<requestFieldName>prompt_id</requestFieldName>
+				<primaryFieldName>prompt_id</primaryFieldName>
+			</settings>
+		</dataProvider>
+	</dataSource>
+	<fieldset name="general">
+		<settings>
+			<label>General</label>
+		</settings>
+		<field name="model" formElement="input" sortOrder="10">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="source" xsi:type="string">Prompt</item>
+				</item>
+			</argument>
+			<settings>
+				<dataType>text</dataType>
+				<label translate="true">model</label>
+				<dataScope>model</dataScope>
+				<validation>
+					<rule name="required-entry" xsi:type="boolean">false</rule>
+				</validation>
+			</settings>
+		</field>
+		<field name="label" formElement="input" sortOrder="20">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="source" xsi:type="string">Prompt</item>
+				</item>
+			</argument>
+			<settings>
+				<dataType>text</dataType>
+				<label translate="true">label</label>
+				<dataScope>label</dataScope>
+				<validation>
+					<rule name="required-entry" xsi:type="boolean">false</rule>
+				</validation>
+			</settings>
+		</field>
+		<field name="prompt" formElement="textarea" sortOrder="30">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="source" xsi:type="string">Prompt</item>
+				</item>
+			</argument>
+			<settings>
+				<dataType>text</dataType>
+				<label translate="true">prompt</label>
+				<dataScope>prompt</dataScope>
+				<validation>
+					<rule name="required-entry" xsi:type="boolean">false</rule>
+				</validation>
+			</settings>
+		</field>
+	</fieldset>
+</form>

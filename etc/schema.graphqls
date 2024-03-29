@@ -1,5 +1,3 @@
-
 type StoreConfig {
-    
-    product_chatgpt_token  : String  @doc(description: "Query by product_chatgpt_token.") 
+    product_chatgpt_token  : String  @doc(description: "Query by product_chatgpt_token.")
 }

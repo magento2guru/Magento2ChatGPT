@@ -11,10 +11,15 @@ use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Helper\Data;
 use Magento\Store\Model\ScopeInterface;
+use Magento2Developer\ChatGPT\Model\Prompt;
+use Magento2Developer\ChatGPT\Model\PromptRepository;
+use Magento2Developer\ChatGPT\Model\ResourceModel\Prompt\CollectionFactory;
 
 class Index extends Template
 {
     private Data $catalogHelper;
+
+    private CollectionFactory $promptCollectionFactory;
 
     /**
      * Constructor
@@ -25,14 +30,32 @@ class Index extends Template
     public function __construct(
         Context $context,
         Data $catalogHelper,
+        CollectionFactory $promptCollectionFactory,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->catalogHelper = $catalogHelper;
+
+        $this->promptCollectionFactory = $promptCollectionFactory;
     }
 
     public function getCurrentProductLanguage() {
         $countryCode = $this->_scopeConfig->getValue('general/locale/code', ScopeInterface::SCOPE_STORE, $this->catalogHelper->getProduct()->getStore()->getCode());
         return  \Locale::getDisplayLanguage($countryCode);
+    }
+
+    public function buildPromptMap() : array {
+        $promptCollection = $this->promptCollectionFactory->create();
+        $promptCollection->addFilter('model','product')->load();
+
+        $promptArray = [];
+
+        foreach ($promptCollection as $prompt)
+        {
+            if (empty($promptArray[$prompt->getModel()])) $promptArray[$prompt->getModel()] = [];
+            $promptArray[$prompt->getModel()][$prompt->getLabel()] = $prompt->getPrompt();
+        }
+
+        return $promptArray;
     }
 }

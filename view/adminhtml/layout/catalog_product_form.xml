@@ -7,21 +7,14 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
     <head>
-<!--        <script src="//unpkg.com/alpinejs"-->
-<!--        &lt;!&ndash;              src_type="url" &ndash;&gt;-->
-<!--        defer="defer" />-->
+        <script src="Magento2Developer_ChatGPT::js/alpinejs.min.js" defer="defer" />
 
-        <script src="Magento2Developer_ChatGPT::js/alpinejs.min.js" defer="defer"
-        />
 
 
     </head>
     <body>
         <referenceContainer name="page.wrapper">
             <block class="Magento2Developer\ChatGPT\Block\Adminhtml\Index\Index" name="magento2developer_chatgpt" template="Magento2Developer_ChatGPT::chatgpt.phtml" />
-
-
-
         </referenceContainer>
     </body>
 </layout>

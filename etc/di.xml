@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento2Developer\ChatGPT\Api\PromptRepositoryInterface" type="Magento2Developer\ChatGPT\Model\PromptRepository"/>
+    <preference for="Magento2Developer\ChatGPT\Api\Data\PromptInterface" type="Magento2Developer\ChatGPT\Model\Prompt"/>
+    <preference for="Magento2Developer\ChatGPT\Api\Data\PromptSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <virtualType name="Magento2Developer\ChatGPT\Model\ResourceModel\Prompt\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">magento2developer_chatgpt_prompt</argument>
+            <argument name="resourceModel" xsi:type="string">Magento2Developer\ChatGPT\Model\ResourceModel\Prompt\Collection</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="magento2developer_chatgpt_prompt_listing_data_source" xsi:type="string">Magento2Developer\ChatGPT\Model\ResourceModel\Prompt\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

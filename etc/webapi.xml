@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/magento2developer-chatgpt/prompt" method="POST">
+        <service class="Magento2Developer\ChatGPT\Api\PromptRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Magento2Developer_ChatGPT::Prompt_save"/>
+        </resources>
+    </route>
+    <route url="/V1/magento2developer-chatgpt/prompt/search" method="GET">
+        <service class="Magento2Developer\ChatGPT\Api\PromptRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento2Developer_ChatGPT::Prompt_view"/>
+        </resources>
+    </route>
+    <route url="/V1/magento2developer-chatgpt/prompt/:promptId" method="GET">
+        <service class="Magento2Developer\ChatGPT\Api\PromptRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Magento2Developer_ChatGPT::Prompt_view"/>
+        </resources>
+    </route>
+    <route url="/V1/magento2developer-chatgpt/prompt/:promptId" method="PUT">
+        <service class="Magento2Developer\ChatGPT\Api\PromptRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Magento2Developer_ChatGPT::Prompt_update"/>
+        </resources>
+    </route>
+    <route url="/V1/magento2developer-chatgpt/prompt/:promptId" method="DELETE">
+        <service class="Magento2Developer\ChatGPT\Api\PromptRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Magento2Developer_ChatGPT::Prompt_delete"/>
+        </resources>
+    </route>
+</routes>
