@@ -64,7 +64,11 @@
                 }
 
                 prompt += '\nRequest: \n';
-                let requestStr = this.promptMap[this.model][label] ?? 'Write '+label.toLowerCase()+ ' for product in context';
+
+                let requestStr = this.promptMap[this.model][label] ??
+                    (label !== 'Product Image' ?
+                        'Write %label% for product name: %product_name%'
+                        : 'Draw %label% for product name: %product_name%');
 
                 requestStr = requestStr.replaceAll('%label%',label.toLowerCase())
 

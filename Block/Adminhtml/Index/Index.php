@@ -44,9 +44,9 @@ class Index extends Template
         return  \Locale::getDisplayLanguage($countryCode);
     }
 
-    public function buildPromptMap() : array {
+    public function buildPromptMap($model = 'product') : array {
         $promptCollection = $this->promptCollectionFactory->create();
-        $promptCollection->addFilter('model','product')->load();
+        $promptCollection->addFilter('model',$model)->load();
 
         $promptArray = [];
 
